@@ -28,7 +28,7 @@ public class PatientService {
 		return repository.save(patient);
 	}
 	
-	public Page<Patient> listByPage(int pageNumber, int pageSize){
+	public Page<Patient> listAllByPage(int pageNumber, int pageSize){
 		Pageable page = PageRequest.of(pageNumber, pageSize);
 		return repository.findAll(page); 
 	}
