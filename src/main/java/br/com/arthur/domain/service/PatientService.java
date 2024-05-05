@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.arthur.domain.entity.Patient;
 import br.com.arthur.domain.repository.PatientRepository;
+import br.com.arthur.exception.BusinessException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -23,7 +24,19 @@ public class PatientService {
 	
 	public Patient save(Patient patient) {
 		
-		// TODO validate if 'CPF' doesn't exists
+		boolean cpfExists = false;
+		
+		Optional<Patient> optPatient = repository.findByCpf(patient.getCpf());
+		
+		if (optPatient.isPresent()) {
+			if (!optPatient.get().getId().equals(patient.getId())) {
+				cpfExists = true;
+			}
+		}
+		
+		if(cpfExists) {
+			throw new BusinessException("CPF already registered");
+		}
 		
 		return repository.save(patient);
 	}
